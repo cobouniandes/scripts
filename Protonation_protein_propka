@@ -1,0 +1,78 @@
+#SCRIPT PARA CAMBIAR ESTADOS DE PROTONACION DE HISTIDINAS USANDO PROPKA
+
+import re
+import os
+print("please, go to http://nbcr-222.ucsd.edu/pdb2pqr_2.0.0/ and insert the Complete_Protein.pdb \n")
+
+print("Copy the url from the output that is named Complete_Protein.pqr and paste it ")
+pqr_file= input(" Insert url of propka server \n ")
+os.system("wget "+pqr_file)
+
+
+with open("Complete_Protein.pqr") as prk_file:
+    content = prk_file.readlines()
+HID=[0]
+HIE=[0]
+HIP=[0]
+GLH=[0]
+ASH=[0]
+# for loop for identify changes in aminoacids names
+# from propka web server
+for i in content:
+    l=i.split()
+    if("ATOM" in l):
+        #print(l[3],l[4])
+        if(l[3]=="HID"):
+            if(HID[-1]!=l[4]):
+                HID.append(l[4])
+        if(l[3]=="HIE"):
+            if(HIE[-1]!=l[4]):
+                HIE.append(l[4])
+        if(l[3]=="HIP"):
+            if(HIP[-1]!=l[4]):
+                HIP.append(l[4])
+        if(l[3]=="GLH"):
+            if(GLH[-1]!=l[4]):
+                GLH.append(l[4])
+        if(l[3]=="ASH"):
+            if(ASH[-1]!=l[4]):
+                ASH.append(l[4])
+
+with open("Complete_Protein.pdb") as comple_protModeler:
+    content = comple_protModeler.readlines()
+
+with open("protonated_prot.pdb","w") as prot_prot:
+    for i in content:
+        lin = re.split(r'(\s+)', i[:-1])
+        if(len(lin)>10):
+        #print(lin[6:11])
+            for j in HID:
+                print(lin[8],j)
+                if(j==lin[8]):
+                    lin[6]="HID"
+            for k in HIE:
+                if(k==lin[8]):
+                    lin[6]="HIE"
+            for k in HIP:
+                if(k==lin[8]):
+                    lin[6]="HIE"
+            for k in GLH:
+                if(k==lin[8]):
+                    lin[6]="GLH"
+            for k in ASH:
+                if(k==lin[8]):
+                    lin[6]="ASH"
+        prot_prot.write("".join(lin))
+        prot_prot.write("\n")
+
+print("---- Change in aminoacids by PropKa ---- \n")
+print("---- For HID ---- \n\n")
+print(HID)
+print("\n---- For HIE ---- \n\n")
+print(HIE)
+print("\n---- For HIP ---- \n\n")
+print(HIP)
+print("\n---- For ASH ---- \n\n")
+print(ASH)
+print("\n---- For GLH ---- \n\n")
+print(GLH)
