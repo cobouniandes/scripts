@@ -1,4 +1,5 @@
 #SCRIPT PARA CAMBIAR ESTADOS DE PROTONACION DE HISTIDINAS USANDO PROPKA
+#Es necesario que el archivo que se suba a propka (http://nbcr-222.ucsd.edu/pdb2pqr_2.0.0/) se llame "Complete_Protein.pdb
 
 import re
 import os
